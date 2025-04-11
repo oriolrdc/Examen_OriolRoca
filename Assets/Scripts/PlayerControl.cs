@@ -9,11 +9,13 @@ public class PlayerControl : MonoBehaviour
     public float playerSpeed = 4.5f;
     public float jumpForce = 12;
     private GroundSensor groundSensor;
+    private Animator _animator;
 
     void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         groundSensor = GetComponentInChildren<GroundSensor>();
+        _animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -23,11 +25,16 @@ public class PlayerControl : MonoBehaviour
         if(inputHorizontal > 0)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
+            _animator.SetBool("IsRunning", true);
         }
-
-        if(inputHorizontal < 0)
+        else if(inputHorizontal < 0)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
+            _animator.SetBool("IsRunning", true);
+        }
+        else
+        {
+            _animator.SetBool("IsRunning", false);
         }
 
         if(Input.GetButtonDown("Jump") && groundSensor.IsGrounded == true)
